@@ -48,9 +48,8 @@ plotScatter <- function(x,
 
     # get R squared coefficient
     r2 <- summary(model)$adj.r.squared
-    p <- p + labs(subtitle = paste("Fitted line: y = ", round(m, digits = 2), "x + ", round(n, digits = 2),
-                                   ". R2 metric:", round(r2, digits = 2),
-                                   sep = ''))
+    p <- p + labs(subtitle = bquote("Fitted line: y = " ~  .(round(m, digits = 2)) ~ "x + " ~
+                                      .(round(n, digits = 2)) ~ ". " ~ R^2 ~ "metric: " ~ .(round(r2, digits = 2))))
   }
 
   plot <- p + g + t + tit + xlab + ylab
