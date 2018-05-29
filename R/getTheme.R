@@ -7,7 +7,8 @@ getTheme <- function(){
                  axis.line = element_line(colour = "black"),
                  panel.grid.major = element_line(colour = "gray90"),
                  panel.grid.minor = element_line(colour = "gray92"),
-                 plot.title = element_text(hjust = 0.5))
+                 plot.title = element_text(hjust = 0.5),
+                 plot.subtitle = element_text(hjust = 0.5))
 
   return(theme)
 }

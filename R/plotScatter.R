@@ -3,7 +3,8 @@
 plotScatter <- function(x,
                         y,
                         color = "blue",
-                        regression = FALSE){
+                        title = "",
+                        regression = F){
 
   library(ggplot2)
 
@@ -26,11 +27,33 @@ plotScatter <- function(x,
   # fill <- scale_fill_manual(values = fillRamp(1))
   # col <- scale_color_manual(values = colRamp(2))
 
+  # title
+  tit <- labs(title = title)
+
   # x and y labels
   if(!is.null(names(x))) {xlab <- xlab(names(x))} else {xlab <- xlab("x")}
   if(!is.null(names(y))) {ylab <- ylab(names(y))} else {ylab <- ylab("y")}
 
-  plot <- p + g + t + xlab + ylab
+  # REGRESSION ----
+  if(regression){
+    # fit a linear model
+    model <- lm(y ~ x)
+
+    # get coefficients of the fitting line
+    n <- model$coefficients[1]
+    m <- model$coefficients[2]
+
+    # add the fitted line to the plot
+    p <- p + geom_abline(slope = m, intercept = n, color = getColors("orange")(1), alpha = 0.5)
+
+    # get R squared coefficient
+    r2 <- summary(model)$adj.r.squared
+    p <- p + labs(subtitle = paste("Fitted line: y = ", round(m, digits = 2), "x + ", round(n, digits = 2),
+                                   ". R2 metric:", round(r2, digits = 2),
+                                   sep = ''))
+  }
+
+  plot <- p + g + t + tit + xlab + ylab
 
   print(plot)
 
