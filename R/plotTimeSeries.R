@@ -5,21 +5,31 @@ plotTimeSeries <- function(dates, values, group = 1, color = "blue", dateScaling
 
   data <- data.frame(dates = dates, values = values)
 
-  if (group > 1){
+  if (length(group) > 1){
     data$groups <- group
   }else
   {
-    groups <- 1
+    data$groups <- 1
   }
 
   color <- getColors(color)
 
   # basics of the plot
-  p <- ggplot(data = data,
-              aes(dates, values, group = groups))
+  if(length(group) > 1){
+    p <- ggplot(data = data,
+                aes(dates, values, group = groups, color = groups))
+  } else{
+    p <- ggplot(data = data,
+                aes(dates, values))
+  }
 
   # geometry = line
-  g <- geom_line(color = color(1))
+  if (length(group) > 1){
+    g <- geom_line()
+
+  } else{
+    g <- geom_line(color = color(1))
+  }
 
   # theme
   t <- getTheme()
