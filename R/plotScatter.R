@@ -2,21 +2,45 @@
 
 plotScatter <- function(x,
                         y,
+                        group = 1,
                         color = "blue",
                         title = "",
                         regression = F){
 
   library(ggplot2)
 
+  # save some auxiliar variables to check conditions
+  existGroup <- length(group) > 1
+
+  # create an auxiliar data frame to store the data to be passed to ggplot2
+  data <- data.frame(x = x, y = y)
+
+  # add a column to the data frame to represent the group at which the data pertains
+  if(existGroup){
+    data$groups <- group
+  } else{
+    data$groups <- 1
+  }
+
   colRamp <- getColors(color = color, type = "colour")
   fillRamp <- getColors(color = color, type = "fill")
 
   # basics of the plot
-  p <- ggplot(data = data.frame(x = x, y = y),
-              aes(x, y))
+  if(existGroup){
+    # plot with color based on the group
+    p <- ggplot(data = data,
+                aes(x, y, group = groups, color = groups))
 
-  # add the points to the graph
-  g <- geom_point(colour = colRamp(1), bg = fillRamp(1))
+    # add the points to the graph
+    g <- geom_point()
+  } else{
+    # basic plot without colour
+    p <- ggplot(data = data,
+                aes(x, y))
+
+    # add the points to the graph and set the color of points
+    g <- geom_point(colour = colRamp(1), bg = fillRamp(1))
+  }
 
   # add the linear model to the graph
 
